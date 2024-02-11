@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  db_app:
+    image: postgres 
+    container_name: db_app
+    restart: always   
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PWD}
+      POSTGRES_DB: ${DB_NAME}    
+    ports:
+      - "5432:5432"
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    # networks:
+    #   - db-network
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    entrypoint: /bin/sh
+    command: >
+      -c "sleep 30 &&
+      kafka-topics --create --bootstrap-server kafka:9092 --partitions 2 --replication-factor 1 --topic ${TOPIC}"
+
+  zookeeper:
+    # networks:
+    #   - db-network
+    image: wurstmeister/zookeeper:3.4.6
+    ports:
+      - "2181:2181"
