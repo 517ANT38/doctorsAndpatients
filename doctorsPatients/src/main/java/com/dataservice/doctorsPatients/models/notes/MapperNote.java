@@ -19,12 +19,8 @@ public class MapperNote {
     public NoteDtoOutput map(Note m){
         var doctor = m.getDoctor();
         var patient = m.getPatient();
-        return NoteDtoOutput.builder().doctor(doctor.getFamily() + " " 
-            + doctor.getName() + " " 
-            + doctor.getPatronymic() == null ? "" : doctor.getPatronymic() )
-            .patient(patient.getFamily() + " "
-            + patient.getName() 
-            + patient.getPatronymic() == null ? "" : patient.getPatronymic())
+        return NoteDtoOutput.builder().doctor(m.getDoctor().getFio().toString())
+            .patient(m.getPatient().getFio().toString())
             .date(m.getDate()).build();
     }
 }

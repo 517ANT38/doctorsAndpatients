@@ -1,6 +1,6 @@
 package com.dataservice.doctorsPatients.models.notes;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class NoteDtoOutput {
     private String doctor;
     private String patient;
-    private Date date;
+    private LocalDateTime date;
 }
