@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.dataservice.doctorsPatients.exceptions.DoctorDublicateException;
 import com.dataservice.doctorsPatients.exceptions.DoctorNotFoundException;
 import com.dataservice.doctorsPatients.models.doctors.Doctor;
 import com.dataservice.doctorsPatients.models.notes.Note;
 import com.dataservice.doctorsPatients.models.util.DateCountNoteDto;
+import com.dataservice.doctorsPatients.models.util.FIODto;
 import com.dataservice.doctorsPatients.repositories.DoctorRepo;
 import com.dataservice.doctorsPatients.repositories.NoteRepo;
+import com.dataservice.doctorsPatients.repositories.PatientRepo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +26,41 @@ import lombok.RequiredArgsConstructor;
 public class DoctorAndNoteService {
     
     private final DoctorRepo doctorRepo;
+    private final PatientRepo patientRepo;
     private final NoteRepo noteRepo;
 
+    @Transactional
     public Doctor saveDoctor(Doctor doctor){
+        if(doctorRepo.existsByNumPass(doctor.getNumPass()))
+            throw new DoctorDublicateException("Doctor exits with numPass="+doctor.getNumPass());
         return doctorRepo.save(doctor);
     }
 
-    public Note saveNote(Note note){
-        
-        return noteRepo.save(note);
+    @Transactional
+    public String saveNote(Note note){
+        var d = note.getDoctor();
+        var p = note.getPatient();
+        if (d == null || !doctorRepo.existsById(d.getId())) {
+            return "Doctor is null or not found";
+        }
+        if (p == null || !patientRepo.existsById(p.getId())) {
+            return "Patient is null or not found";
+        }
+        noteRepo.save(note);
+        return "Save note";
+    }
+
+    public List<Doctor> getByFio(FIODto fio){
+        return doctorRepo.findByFio(fio);
+    }
+
+    public List<Doctor> getAll(){
+        return doctorRepo.findAll();
+    }
+
+    public Doctor getById(Integer idDoctor){
+        return doctorRepo.findById(idDoctor)
+        .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id="+ idDoctor));
     }
 
     public List<Doctor> getTop10WithMaxPatients(){

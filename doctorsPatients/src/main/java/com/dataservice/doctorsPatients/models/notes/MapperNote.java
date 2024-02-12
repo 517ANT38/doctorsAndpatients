@@ -16,9 +16,7 @@ public class MapperNote {
             .id(dto.getPatientId()).build());
         return note;
     }
-    public NoteDtoOutput map(Note m){
-        var doctor = m.getDoctor();
-        var patient = m.getPatient();
+    public NoteDtoOutput map(Note m){       
         return NoteDtoOutput.builder().doctor(m.getDoctor().getFio().toString())
             .patient(m.getPatient().getFio().toString())
             .date(m.getDate()).build();

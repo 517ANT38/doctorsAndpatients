@@ -8,4 +8,5 @@ import org.mapstruct.ReportingPolicy;
 public interface MapperPatient {
     @InheritInverseConfiguration
     Patient map(PatientDto dto);
+    PatientDto map(Patient dto);
 }

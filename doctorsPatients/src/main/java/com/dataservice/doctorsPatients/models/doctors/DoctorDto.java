@@ -1,5 +1,7 @@
 package com.dataservice.doctorsPatients.models.doctors;
 
+import com.dataservice.doctorsPatients.models.util.FIODto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class DoctorDto {
     private String name;
-    private String family;
-    private String patronymic;
+    private FIODto fio;
     private String jobTitle;
     private String dateEmp;
 }

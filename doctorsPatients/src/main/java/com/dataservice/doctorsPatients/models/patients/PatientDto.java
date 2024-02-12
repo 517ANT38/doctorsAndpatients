@@ -2,6 +2,7 @@ package com.dataservice.doctorsPatients.models.patients;
 
 import java.time.LocalDate;
 
+import com.dataservice.doctorsPatients.models.util.FIODto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder(toBuilder = true)
 public class PatientDto {
-    private String name;
-    private String family;
-    private String patronymic;
+    private FIODto fio;
+    private long snils;
     private LocalDate dateBirth;
     private LocalDate regHospital;
 }
