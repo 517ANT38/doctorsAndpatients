@@ -14,22 +14,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @Column(nullable = false)
-    @JoinColumn(name = "idDoctor",referencedColumnName = "id")
+    @JoinColumn(name = "idDoctor",referencedColumnName = "id",nullable = false)
     private Doctor doctor;
     @ManyToOne
-    @Column(nullable = false)
-    @JoinColumn(name = "idPatient",referencedColumnName = "id")
+    @JoinColumn(name = "idPatient",referencedColumnName = "id",nullable = false)
     private Patient patient;
     private LocalDateTime date;
 }
