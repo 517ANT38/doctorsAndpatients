@@ -7,9 +7,9 @@ if [ "$gd" = "$gr" ]; then
     cd doctorsPatients
     DOCKER_BUILDKIT=1 docker build -f build-elements/Dockerfile -t serv/data_service .
     cd ..
-    # cd producer
-    # DOCKER_BUILDKIT=1 docker build -f build-elements/Dockerfile -t serv/producer .
-    # cd ..
+    cd apiDoctors
+    DOCKER_BUILDKIT=1 docker build -f build-elements/Dockerfile -t serv/api_doctors .
+    cd ..
 else
     echo "User $USER is not a member of the Docker group."
     exit 1
