@@ -49,7 +49,7 @@ public class DoctorController {
     }
 
     @GetMapping("/getFio")
-    public ResponseEntity<List<DoctorDto>> getDoctorByFio(FIODto fDto){
+    public ResponseEntity<List<DoctorDto>> getDoctorByFio(@RequestBody FIODto fDto){
         return ResponseEntity.ok(danS.getByFio(fDto).stream()
             .map(mapper::map)
             .toList());
