@@ -1,40 +1,63 @@
 version: '3.7'
 services:
+
+  data_app:
+    image: serv/data_service
+    container_name: data_app
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PWD=${DB_PWD}
+      - DB_HOST=${DB_HOST}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - SERVER_PORT=8081
+      - KAFKA_CONSUMER_ID=group_id_1
+    depends_on:
+      - db_app
+      - kafka
+    networks:
+      - db-network
+
   db_app:
     image: postgres 
-    container_name: db_app
-    restart: always   
+    container_name: ${DB_HOST}
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PWD}
-      POSTGRES_DB: ${DB_NAME}    
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${DB_NAME} 
+    networks:
+      - db-network
+         
+   
   kafka:
     image: confluentinc/cp-kafka:latest
-    # networks:
-    #   - db-network
+    networks:
+      - db-network
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
-    entrypoint: /bin/sh
-    command: >
-      -c "sleep 30 &&
-      kafka-topics --create --bootstrap-server kafka:9092 --partitions 2 --replication-factor 1 --topic ${TOPIC}"
 
   zookeeper:
-    # networks:
-    #   - db-network
-    image: wurstmeister/zookeeper:3.4.6
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - db-network
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
     ports:
-      - "2181:2181"
+      - 2181:2181
+
+networks:
+  db-network:
+    driver: bridge
+    internal: true 
+  api-network:
+    driver: bridge
