@@ -1,1 +1,2 @@
-data-service.base-url=${DATA_SERVICE_BASE_URL}
+data-service:
+  base-url:${DATA_SERVICE_BASE_URL}

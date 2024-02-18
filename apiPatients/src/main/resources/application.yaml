@@ -1,0 +1,11 @@
+kafka:
+  hospital.topic: ${KAFKA_TOPIC}
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      auto-offset-reset: earliest
+    producer:
+      properties.spring.json.add.type.headers: false
+data-service:
+  base-url: ${DATA_SERVICE_BASE_URL}

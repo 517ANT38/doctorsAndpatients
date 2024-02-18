@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class ApiServiceController {
 
     private final RestTemplate template;
-    @Value("data-service.base-url")
+    @Value("${data-service.base-url}")
     private String baseUrl;
 
     @PostMapping("/addDoctor")
@@ -41,8 +41,8 @@ public class ApiServiceController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         var httpEnitity = new HttpEntity<>(dto,headers);
         try {
-            template.exchange(baseUrl+"/addDoctor",HttpMethod.POST,
-                httpEnitity,Object.class);
+            template.exchange(baseUrl+"/doctors/addDoctor",HttpMethod.POST,
+                httpEnitity,DoctorDto.class);
             return ResponseEntity.ok("Add doctor");
             
         }
@@ -56,7 +56,7 @@ public class ApiServiceController {
 
     @GetMapping("/{idDoctor}/getDateDayCountNotes")
     public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("idDoctor") Integer idDoctor){
-        var path = "/{idDoctor}/getDateDayCountNotes";
+        var path = "/doctors/{idDoctor}/getDateDayCountNotes";
         ParameterizedTypeReference<List<DateCountNoteDto>> v =
              new ParameterizedTypeReference<List<DateCountNoteDto>>() {};
         try {
@@ -75,13 +75,13 @@ public class ApiServiceController {
     public ResponseEntity<List<DoctorDto>> getAll(){
         ParameterizedTypeReference<List<DoctorDto>> v = 
             new ParameterizedTypeReference<List<DoctorDto>>() {};
-        return template.exchange(baseUrl, HttpMethod.GET,null,v);
+        return template.exchange(baseUrl+"/doctors", HttpMethod.GET,null,v);
 
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDto> getById(@PathVariable("id")Integer id){
-        var path ="/{id}";
+        var path ="/doctors/{id}";
         try{
             return template.exchange(baseUrl+path, HttpMethod.GET, 
                 null, DoctorDto.class, Map.of("id",id));
@@ -95,14 +95,14 @@ public class ApiServiceController {
     }
 
     @GetMapping("/getFio")
-    public ResponseEntity<List<DoctorDto>> getDoctorByFio(FIODto fDto){
+    public ResponseEntity<List<DoctorDto>> getDoctorByFio(@RequestBody FIODto fDto){
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         var httpEnitity = new HttpEntity<>(fDto,headers);
         ParameterizedTypeReference<List<DoctorDto>> v = 
             new ParameterizedTypeReference<List<DoctorDto>>() {};
         try {
-            return template.exchange(baseUrl+"/getFio", HttpMethod.GET, httpEnitity, v);
+            return template.exchange(baseUrl+"/doctors/getFio", HttpMethod.GET, httpEnitity, v);
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity
@@ -115,7 +115,7 @@ public class ApiServiceController {
     public ResponseEntity<List<DoctorDto>> getTop10WithMaxPatients(){
         ParameterizedTypeReference<List<DoctorDto>> v = 
             new ParameterizedTypeReference<List<DoctorDto>>() {};
-        var path = "/getTop10WithMaxPatients";
+        var path = "/doctors/getTop10WithMaxPatients";
         return template.exchange(baseUrl+path, HttpMethod.GET,null,v);
     }
 }
