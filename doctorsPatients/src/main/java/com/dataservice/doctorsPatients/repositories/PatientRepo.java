@@ -12,6 +12,6 @@ import com.dataservice.doctorsPatients.models.util.FIODto;
 @Repository
 public interface PatientRepo extends JpaRepository<Patient,Integer> {
     List<Patient> findByFio(FIODto fio);
-    Optional<Patient> findBySnils(long snils);
-    boolean existsBySnils(long snils);
+    Optional<Patient> findBySnils(String snils);
+    boolean existsBySnils(String snils);
 }

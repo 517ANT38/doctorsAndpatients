@@ -27,7 +27,7 @@ public class PatientService {
         return patientRepo.findAll();
     }
 
-    public Patient getBySnils(long snils){
+    public Patient getBySnils(String snils){
         return patientRepo.findBySnils(snils)
         .orElseThrow(() -> new PatientNotFoundException("Patient not found with snils="+ snils));
     }

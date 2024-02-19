@@ -18,12 +18,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,9 +41,59 @@ public class Patient {
     })
     private FIODto fio;
     @Column(unique = true)
-    private long snils;
+    private String snils;
     private LocalDate dateBirth;
     private LocalDate regHospital;
     @OneToMany(mappedBy = "patient")
     private Set<Note> notes;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((fio == null) ? 0 : fio.hashCode());
+        result = prime * result + ((snils == null) ? 0 : snils.hashCode());
+        result = prime * result + ((dateBirth == null) ? 0 : dateBirth.hashCode());
+        result = prime * result + ((regHospital == null) ? 0 : regHospital.hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Patient other = (Patient) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (fio == null) {
+            if (other.fio != null)
+                return false;
+        } else if (!fio.equals(other.fio))
+            return false;
+        if (snils == null) {
+            if (other.snils != null)
+                return false;
+        } else if (!snils.equals(other.snils))
+            return false;
+        if (dateBirth == null) {
+            if (other.dateBirth != null)
+                return false;
+        } else if (!dateBirth.equals(other.dateBirth))
+            return false;
+        if (regHospital == null) {
+            if (other.regHospital != null)
+                return false;
+        } else if (!regHospital.equals(other.regHospital))
+            return false;
+        return true;
+    }
+
+    
+
 }

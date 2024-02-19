@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class PatientDto {
     private FIODto fio;
-    private long snils;
+    private String snils;
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate dateBirth;

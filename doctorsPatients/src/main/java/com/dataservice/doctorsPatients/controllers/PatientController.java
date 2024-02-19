@@ -29,7 +29,7 @@ public class PatientController {
     }
 
     @GetMapping("/{snils}")
-    public ResponseEntity<PatientDto> getBySnils(@PathVariable long snils){
+    public ResponseEntity<PatientDto> getBySnils(@PathVariable String snils){
         return ResponseEntity.ok(mapper.map(patientService.getBySnils(snils)));
     }
 

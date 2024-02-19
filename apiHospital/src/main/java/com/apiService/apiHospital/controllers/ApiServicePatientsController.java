@@ -63,7 +63,7 @@ public class ApiServicePatientsController {
     }
 
     @GetMapping("/{snils}")
-    public ResponseEntity<PatientDto> getById(@PathVariable long snils){
+    public ResponseEntity<PatientDto> getById(@PathVariable String snils){
         var path ="/patients/{snils}";
         try{
             return restTemplate.exchange(baseUrl+path, HttpMethod.GET, 
