@@ -1,9 +1,24 @@
 version: '3.7'
 services:
 
-  data_app:
+  api_doctors:
+    image: serv/api_doctors
+    container_name: api_doctors
+    networks:
+      - db-network
+      - api-network
+    ports:
+      - "8080:8080"
+    environment:
+      - DATA_SERVICE_BASE_URL=${DATA_SERVICE_BASE_URL}
+    depends_on:
+      - 
+
+  data_app1:
     image: serv/data_service
-    container_name: data_app
+    container_name: data_app1
+    ports:
+      - "8081:8081"
     environment:
       - DB_USER=${DB_USER}
       - DB_NAME=${DB_NAME}
@@ -12,6 +27,26 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - KAFKA_TOPIC=${KAFKA_TOPIC}
       - SERVER_PORT=8081
+      - KAFKA_CONSUMER_ID=group_id_1
+    depends_on:
+      - db_app
+      - kafka
+    networks:
+      - db-network
+
+  data_app2:
+    image: serv/data_service
+    container_name: data_app2
+    ports:
+      - "8082:8082"
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PWD=${DB_PWD}
+      - DB_HOST=${DB_HOST}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - SERVER_PORT=8082
       - KAFKA_CONSUMER_ID=group_id_1
     depends_on:
       - db_app

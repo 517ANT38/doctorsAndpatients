@@ -1,2 +1,0 @@
-data-service:
-  base-url:${DATA_SERVICE_BASE_URL}
