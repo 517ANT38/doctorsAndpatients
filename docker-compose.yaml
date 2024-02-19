@@ -1,18 +1,23 @@
 version: '3.7'
 services:
 
-  api_doctors:
-    image: serv/api_doctors
-    container_name: api_doctors
+  api_hospital:
+    image: serv/api_hospital
+    container_name: api_hospital
     networks:
       - db-network
       - api-network
     ports:
       - "8080:8080"
     environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093 
       - DATA_SERVICE_BASE_URL=${DATA_SERVICE_BASE_URL}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - SERVER_PORT=8080
     depends_on:
-      - 
+      - kafka
+      - data_app1
+      - data_app2
 
   data_app1:
     image: serv/data_service

@@ -1,4 +1,4 @@
-package com.apiHospital.apiDoctors.controllers;
+package com.apiService.apiHospital.controllers;
 
 import java.util.List;
 import java.util.Map;

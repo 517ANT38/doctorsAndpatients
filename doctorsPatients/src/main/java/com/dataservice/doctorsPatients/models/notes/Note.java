@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.dataservice.doctorsPatients.models.doctors.Doctor;
 import com.dataservice.doctorsPatients.models.patients.Patient;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,5 +34,6 @@ public class Note {
     @ManyToOne
     @JoinColumn(name = "idPatient",referencedColumnName = "id",nullable = false)
     private Patient patient;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;
 }

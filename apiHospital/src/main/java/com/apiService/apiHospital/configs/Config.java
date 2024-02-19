@@ -1,4 +1,4 @@
-package com.apiService.apiHospital.config;
+package com.apiService.apiHospital.configs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.web.client.RestTemplate;
 
-import com.apiHospital.dtos.NoteDtoInput;
+import com.apiService.apiHospital.dtos.NoteDtoInput;
 
 @Configuration
 public class Config {
@@ -23,6 +23,7 @@ public class Config {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
+    @Bean
     RestTemplate template(){
         return new RestTemplate();
     }
