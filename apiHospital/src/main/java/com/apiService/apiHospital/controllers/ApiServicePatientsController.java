@@ -23,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 import com.apiService.apiHospital.dtos.FIODto;
 import com.apiService.apiHospital.dtos.NoteDtoInput;
 import com.apiService.apiHospital.dtos.PatientDto;
-import com.apiService.apiHospital.dtos.ResponseError;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,20 +55,19 @@ public class ApiServicePatientsController {
             return ResponseEntity.ok("Add patient");
             
         }
-        catch(HttpStatusCodeException e){     
-            var err = e.getResponseBodyAs(ResponseError.class);       
+        catch(HttpStatusCodeException e){            
             return ResponseEntity
                 .status(e.getStatusCode().value())
-                .body(err.getMessage());
+                .build();
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PatientDto> getById(@PathVariable Integer id){
-        var path ="/patients/{id}";
+    @GetMapping("/{snils}")
+    public ResponseEntity<PatientDto> getById(@PathVariable long snils){
+        var path ="/patients/{snils}";
         try{
             return restTemplate.exchange(baseUrl+path, HttpMethod.GET, 
-                null, PatientDto.class, Map.of("id",id));
+                null, PatientDto.class, Map.of("snils",snils));
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity
@@ -86,7 +84,7 @@ public class ApiServicePatientsController {
     }
 
     @GetMapping("/getFio")
-    public ResponseEntity<List<PatientDto>> getByFio(@RequestBody FIODto fDto){
+    public ResponseEntity<List<PatientDto>> getByFio(FIODto fDto){
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         var httpEnitity = new HttpEntity<>(fDto,headers);

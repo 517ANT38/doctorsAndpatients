@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class DoctorDto {
     private FIODto fio;
     private String jobTitle;
+    private long  numPass;
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate dateEmp;

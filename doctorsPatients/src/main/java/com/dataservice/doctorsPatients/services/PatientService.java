@@ -27,9 +27,9 @@ public class PatientService {
         return patientRepo.findAll();
     }
 
-    public Patient getById(Integer idPatient){
-        return patientRepo.findById(idPatient)
-        .orElseThrow(() -> new PatientNotFoundException("Patient not found with id="+ idPatient));
+    public Patient getBySnils(long snils){
+        return patientRepo.findBySnils(snils)
+        .orElseThrow(() -> new PatientNotFoundException("Patient not found with snils="+ snils));
     }
 
     @Transactional

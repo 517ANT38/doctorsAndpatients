@@ -10,18 +10,18 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093 
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092 
       - DATA_SERVICE_BASE_URL=${DATA_SERVICE_BASE_URL}
       - KAFKA_TOPIC=${KAFKA_TOPIC}
       - SERVER_PORT=8080
     depends_on:
       - kafka
-      - data_app1
-      - data_app2
+      - data-app1
+      - data-app2
 
-  data_app1:
+  data-app1:
     image: serv/data_service
-    container_name: data_app1
+    container_name: data-app1
     ports:
       - "8081:8081"
     environment:
@@ -39,9 +39,9 @@ services:
     networks:
       - db-network
 
-  data_app2:
+  data-app2:
     image: serv/data_service
-    container_name: data_app2
+    container_name: data-app2
     ports:
       - "8082:8082"
     environment:

@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import com.apiService.apiHospital.dtos.DateCountNoteDto;
 import com.apiService.apiHospital.dtos.DoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
-import com.apiService.apiHospital.dtos.ResponseError;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,27 +40,28 @@ public class ApiServiceDoctorsController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         var httpEnitity = new HttpEntity<>(dto,headers);
         try {
+            System.out.println(dto);
             template.exchange(baseUrl+"/doctors/addDoctor",HttpMethod.POST,
                 httpEnitity,DoctorDto.class);
             return ResponseEntity.ok("Add doctor");
             
         }
         catch(HttpStatusCodeException e){     
-            var err = e.getResponseBodyAs(ResponseError.class);       
+                   
             return ResponseEntity
                 .status(e.getStatusCode().value())
-                .body(err.getMessage());
+                .build();
         }
     }
 
-    @GetMapping("/{idDoctor}/getDateDayCountNotes")
-    public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("idDoctor") Integer idDoctor){
-        var path = "/doctors/{idDoctor}/getDateDayCountNotes";
+    @GetMapping("/{numPass}/getDateDayCountNotes")
+    public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("numPass")  long numPass){
+        var path = "/doctors/{numPass}/getDateDayCountNotes";
         ParameterizedTypeReference<List<DateCountNoteDto>> v =
              new ParameterizedTypeReference<List<DateCountNoteDto>>() {};
         try {
             var res = template.exchange(baseUrl+path, HttpMethod.GET,
-                null, v,Map.of("idDoctor",idDoctor));
+                null, v,Map.of("numPass",numPass));
             return res;
         }
         catch(HttpStatusCodeException e){            
@@ -79,12 +79,12 @@ public class ApiServiceDoctorsController {
 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DoctorDto> getById(@PathVariable("id")Integer id){
-        var path ="/doctors/{id}";
+    @GetMapping("/{numPass}")
+    public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")long numPass){
+        var path ="/doctors/{numPass}";
         try{
             return template.exchange(baseUrl+path, HttpMethod.GET, 
-                null, DoctorDto.class, Map.of("id",id));
+                null, DoctorDto.class, Map.of("numPass",numPass));
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity
@@ -95,7 +95,7 @@ public class ApiServiceDoctorsController {
     }
 
     @GetMapping("/getFio")
-    public ResponseEntity<List<DoctorDto>> getDoctorByFio(@RequestBody FIODto fDto){
+    public ResponseEntity<List<DoctorDto>> getDoctorByFio(FIODto fDto){
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         var httpEnitity = new HttpEntity<>(fDto,headers);

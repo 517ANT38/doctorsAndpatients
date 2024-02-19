@@ -11,14 +11,15 @@ public class MapperNote {
         var note = new Note();
         note.setDate(dto.getDate());
         note.setDoctor(Doctor.builder()
-            .id(dto.getDoctorId()).build());
+            .numPass(dto.getNumPass()).build());
         note.setPatient(Patient.builder()
-            .id(dto.getPatientId()).build());
+            .snils(dto.getSnils()).build());
         return note;
     }
     public NoteDtoOutput map(Note m){       
-        return NoteDtoOutput.builder().doctor(m.getDoctor().getFio().toString())
-            .patient(m.getPatient().getFio().toString())
+        return NoteDtoOutput.builder()
+            .snils(m.getPatient().getSnils())
+            .numPass(m.getDoctor().getNumPass())
             .date(m.getDate()).build();
     }
 }

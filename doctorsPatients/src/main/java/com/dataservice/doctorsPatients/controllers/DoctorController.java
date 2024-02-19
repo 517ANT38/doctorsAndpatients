@@ -28,12 +28,13 @@ public class DoctorController {
 
     @PostMapping("/addDoctor")
     public ResponseEntity<DoctorDto> save(@RequestBody DoctorDto dto){
+        
         return ResponseEntity.ok(mapper.map(danS.saveDoctor(mapper.map(dto))));
     }
 
-    @GetMapping("/{idDoctor}/getDateDayCountNotes")
-    public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("idDoctor") Integer idDoctor){
-        return ResponseEntity.ok(danS.getDateDayCountNotes(idDoctor));
+    @GetMapping("/{numPass}/getDateDayCountNotes")
+    public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("numPass") long numPass){
+        return ResponseEntity.ok(danS.getDateDayCountNotes(numPass));
     }
 
     @GetMapping
@@ -43,13 +44,13 @@ public class DoctorController {
             .toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DoctorDto> getById(@PathVariable("id")Integer id){
-        return ResponseEntity.ok(mapper.map(danS.getById(id)));
+    @GetMapping("/{numPass}")
+    public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")long numPass){
+        return ResponseEntity.ok(mapper.map(danS.getByNumPass(numPass)));
     }
 
     @GetMapping("/getFio")
-    public ResponseEntity<List<DoctorDto>> getDoctorByFio(@RequestBody FIODto fDto){
+    public ResponseEntity<List<DoctorDto>> getDoctorByFio(FIODto fDto){
         return ResponseEntity.ok(danS.getByFio(fDto).stream()
             .map(mapper::map)
             .toList());

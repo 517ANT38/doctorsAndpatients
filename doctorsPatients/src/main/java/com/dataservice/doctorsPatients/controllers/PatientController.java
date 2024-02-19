@@ -28,9 +28,9 @@ public class PatientController {
         return ResponseEntity.ok(mapper.map(patientService.savePatient(mapper.map(dto))));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PatientDto> getById(@PathVariable Integer id){
-        return ResponseEntity.ok(mapper.map(patientService.getById(id)));
+    @GetMapping("/{snils}")
+    public ResponseEntity<PatientDto> getBySnils(@PathVariable long snils){
+        return ResponseEntity.ok(mapper.map(patientService.getBySnils(snils)));
     }
 
     @GetMapping

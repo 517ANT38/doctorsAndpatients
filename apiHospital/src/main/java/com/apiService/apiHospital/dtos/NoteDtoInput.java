@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder(toBuilder = true)
 public class NoteDtoInput {
-    private Integer doctorId;
-    private Integer patientId;
+    private long numPass;
+    private long snils;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;

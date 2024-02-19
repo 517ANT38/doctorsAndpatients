@@ -2,6 +2,10 @@ package com.dataservice.doctorsPatients.models.notes;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +16,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder(toBuilder = true)
 public class NoteDtoInput {
-    private Integer doctorId;
-    private Integer patientId;
+    private long numPass;
+    private long snils;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;
 }

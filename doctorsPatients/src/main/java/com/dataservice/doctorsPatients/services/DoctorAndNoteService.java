@@ -3,8 +3,10 @@ package com.dataservice.doctorsPatients.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,12 +42,27 @@ public class DoctorAndNoteService {
     public String saveNote(Note note){
         var d = note.getDoctor();
         var p = note.getPatient();
-        if (d == null || !doctorRepo.existsById(d.getId())) {
+        if (d == null || !doctorRepo.existsByNumPass(d.getNumPass())) {
             return "Doctor is null or not found";
         }
-        if (p == null || !patientRepo.existsById(p.getId())) {
+        if (p == null || !patientRepo.existsBySnils(p.getSnils())) {
             return "Patient is null or not found";
         }
+        var dFromDb = doctorRepo.findByNumPass(d.getNumPass()).get();
+        var pFromDb = patientRepo.findBySnils(p.getSnils()).get();
+        note.setDoctor(dFromDb);
+        note.setPatient(pFromDb);
+        var notesD = Optional.ofNullable(dFromDb.getNotes())
+            .orElse(new HashSet<>());
+        notesD.add(note);
+        dFromDb.setNotes(notesD);
+        var notesP = Optional.ofNullable(pFromDb.getNotes())
+            .orElse(new HashSet<>());
+        notesP.add(note);
+        pFromDb.setNotes(notesP);
+
+        doctorRepo.save(dFromDb);
+        patientRepo.save(pFromDb);
         noteRepo.save(note);
         return "Save note";
     }
@@ -58,9 +75,9 @@ public class DoctorAndNoteService {
         return doctorRepo.findAll();
     }
 
-    public Doctor getById(Integer idDoctor){
-        return doctorRepo.findById(idDoctor)
-        .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id="+ idDoctor));
+    public Doctor getByNumPass(long numPass){
+        return doctorRepo.findByNumPass(numPass)
+        .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with numPass="+ numPass));
     }
 
     public List<Doctor> getTop10WithMaxPatients(){
@@ -70,9 +87,9 @@ public class DoctorAndNoteService {
             .toList();
     }
     
-    public List<DateCountNoteDto> getDateDayCountNotes(Integer idDoctor) {
-        var d = doctorRepo.findById(idDoctor)
-            .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id="+ idDoctor));
+    public List<DateCountNoteDto> getDateDayCountNotes(long numPass) {
+        var d = doctorRepo.findByNumPass(numPass)
+            .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with numPass="+ numPass));
         var setNotes = d.getNotes();
         Map<LocalDate,Integer> map = new HashMap<>();
         for (Note note : setNotes) {
