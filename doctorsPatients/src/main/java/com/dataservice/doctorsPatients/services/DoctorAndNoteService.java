@@ -11,7 +11,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dataservice.doctorsPatients.exceptions.DoctorDublicateException;
 import com.dataservice.doctorsPatients.exceptions.DoctorNotFoundException;
 import com.dataservice.doctorsPatients.models.doctors.Doctor;
 import com.dataservice.doctorsPatients.models.notes.Note;
