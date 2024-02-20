@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dataservice.doctorsPatients.exceptions.PatientDublicateException;
 import com.dataservice.doctorsPatients.exceptions.PatientNotFoundException;
 import com.dataservice.doctorsPatients.models.patients.Patient;
 import com.dataservice.doctorsPatients.models.util.FIODto;
@@ -29,15 +28,15 @@ public class PatientService {
 
     public Patient getBySnils(String snils){
         return patientRepo.findBySnils(snils)
-        .orElseThrow(() -> new PatientNotFoundException("Patient not found with snils="+ snils));
+            .orElseThrow(() -> new PatientNotFoundException("Patient not found with snils="+ snils));
     }
 
     @Transactional
-    public Patient savePatient(Patient p){
+    public String savePatient(Patient p){
         if (patientRepo.existsBySnils(p.getSnils())) {
-            throw new PatientDublicateException("Patient exits with snils=" + p.getSnils());
+            return "Patient exits with snils=" + p.getSnils();
         }
-        return patientRepo.save(p);
+        return "Patient aded";
     }
 
     public List<Patient> getTop10MaxCountNotes(){

@@ -32,10 +32,10 @@ public class DoctorAndNoteService {
     private final NoteRepo noteRepo;
 
     @Transactional
-    public Doctor saveDoctor(Doctor doctor){
+    public String saveDoctor(Doctor doctor){
         if(doctorRepo.existsByNumPass(doctor.getNumPass()))
-            throw new DoctorDublicateException("Doctor exits with numPass="+doctor.getNumPass());
-        return doctorRepo.save(doctor);
+            return "Doctor exits with numPass="+doctor.getNumPass();
+        return "Doctor added";
     }
 
     @Transactional
