@@ -10,5 +10,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
 kafka:
-  hospital.topic: ${KAFKA_TOPIC}
+  note.topic: ${KAFKA_TOPIC_NOTE}
+  doctor.topic: ${KAFKA_TOPIC_DOCTOR}
+  patient.topic: ${KAFKA_TOPIC_PATIENT}
   consumer.id: ${KAFKA_CONSUMER_ID}

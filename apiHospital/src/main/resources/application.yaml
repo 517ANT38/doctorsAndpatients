@@ -1,7 +1,9 @@
 server:
   port: ${SERVER_PORT}
 kafka:
-  hospital.topic: ${KAFKA_TOPIC}
+  note.topic: ${KAFKA_TOPIC_NOTE}
+  doctor.topic: ${KAFKA_TOPIC_DOCTOR}
+  patient.topic: ${KAFKA_TOPIC_PATIENT}
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
