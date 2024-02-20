@@ -26,11 +26,7 @@ public class DoctorController {
     private final DoctorAndNoteService danS;
     private final MapperDoctor mapper;
 
-    @PostMapping("/addDoctor")
-    public ResponseEntity<DoctorDto> save(@RequestBody DoctorDto dto){
-        
-        return ResponseEntity.ok(mapper.map(danS.saveDoctor(mapper.map(dto))));
-    }
+    
 
     @GetMapping("/{numPass}/getDateDayCountNotes")
     public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("numPass") long numPass){

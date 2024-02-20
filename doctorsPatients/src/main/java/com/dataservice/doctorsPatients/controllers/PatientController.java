@@ -22,11 +22,7 @@ public class PatientController {
 
     private final PatientService patientService;
     private final MapperPatient mapper;
-
-    @PostMapping("/addPatient")
-    public ResponseEntity<PatientDto> save(@RequestBody PatientDto dto){
-        return ResponseEntity.ok(mapper.map(patientService.savePatient(mapper.map(dto))));
-    }
+   
 
     @GetMapping("/{snils}")
     public ResponseEntity<PatientDto> getBySnils(@PathVariable String snils){
