@@ -41,7 +41,7 @@ public class PatientService {
 
     public List<Patient> getTop10MaxCountNotes(){
         return patientRepo.findAll().stream()
-            .filter(x -> x.getNotes().size() > 6)
+            .filter(x -> x.getNotes().size() > 3)
             .limit(10)
             .toList();
     }

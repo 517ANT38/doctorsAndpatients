@@ -81,7 +81,7 @@ public class DoctorAndNoteService {
 
     public List<Doctor> getTop10WithMaxPatients(){
         return doctorRepo.findAll().stream()
-            .filter(x -> x.getNotes().size() > 10)
+            .filter(x -> x.getNotes().size() > 3)
             .limit(10)
             .toList();
     }
