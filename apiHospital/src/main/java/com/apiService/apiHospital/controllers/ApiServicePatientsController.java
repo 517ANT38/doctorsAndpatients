@@ -25,8 +25,10 @@ import org.springframework.web.client.RestTemplate;
 import com.apiService.apiHospital.dtos.FIODto;
 import com.apiService.apiHospital.dtos.NoteDtoInput;
 import com.apiService.apiHospital.dtos.PatientDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @RestController
 @RequestMapping("/api/patients")
@@ -35,35 +37,28 @@ import lombok.RequiredArgsConstructor;
     methods = {RequestMethod.GET,RequestMethod.POST})
 public class ApiServicePatientsController {
     
-    private final KafkaTemplate<String,NoteDtoInput> kafkaTemplate;
+    private final KafkaTemplate<String,String> kafkaTemplate;
+    private final ObjectMapper mapper;
     private final RestTemplate restTemplate;
     @Value("${data-service.base-url}")
     private String baseUrl;
-    @Value("${kafka.hospital.topic}")
-    private String hospitalTopic;
+    @Value("${kafka.note.topic}")
+    private String noteTopic;
+    @Value("${kafka.patient.topic}")
+    private String patientTopic;
 
     @PostMapping("/addNoteInDoctor")
+    @SneakyThrows
     public ResponseEntity<String> addNote(@RequestBody NoteDtoInput dto){
-        kafkaTemplate.send(hospitalTopic,dto);
+        kafkaTemplate.send(noteTopic,mapper.writeValueAsString(dto));
         return ResponseEntity.ok("Note added successfully");
     }
 
     @PostMapping("/addPatient")
-    public ResponseEntity<String> save(@RequestBody PatientDto dto){
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        var httpEnitity = new HttpEntity<>(dto,headers);
-        try {
-            restTemplate.exchange(baseUrl+"/patients/addPatient",HttpMethod.POST,
-                httpEnitity,PatientDto.class);
-            return ResponseEntity.ok("Add patient");
-            
-        }
-        catch(HttpStatusCodeException e){            
-            return ResponseEntity
-                .status(e.getStatusCode().value())
-                .build();
-        }
+    @SneakyThrows
+    public ResponseEntity<String> addPatient(@RequestBody PatientDto dto){
+        kafkaTemplate.send(patientTopic,mapper.writeValueAsString(dto));
+        return ResponseEntity.ok("Patient added successfully");
     }
 
     @GetMapping("/{snils}")

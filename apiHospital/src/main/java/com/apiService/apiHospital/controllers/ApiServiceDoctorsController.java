@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,36 +23,31 @@ import org.springframework.web.client.RestTemplate;
 import com.apiService.apiHospital.dtos.DateCountNoteDto;
 import com.apiService.apiHospital.dtos.DoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @RestController
 @RequestMapping("/api/doctors")
 @RequiredArgsConstructor
 public class ApiServiceDoctorsController {
 
+    private final ObjectMapper mapper;
+    private final KafkaTemplate<String,String> kafkaTemplate;
     private final RestTemplate template;
     @Value("${data-service.base-url}")
     private String baseUrl;
+    @Value("${kafka.doctor.topic}")
+    private String topic;
+
 
     @PostMapping("/addDoctor")
-    public ResponseEntity<String> save(@RequestBody DoctorDto dto){
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        var httpEnitity = new HttpEntity<>(dto,headers);
-        try {
-            System.out.println(dto);
-            template.exchange(baseUrl+"/doctors/addDoctor",HttpMethod.POST,
-                httpEnitity,DoctorDto.class);
-            return ResponseEntity.ok("Add doctor");
-            
-        }
-        catch(HttpStatusCodeException e){     
-                   
-            return ResponseEntity
-                .status(e.getStatusCode().value())
-                .build();
-        }
+    @SneakyThrows
+    public ResponseEntity<String> addDoctor(@RequestBody DoctorDto dto){
+        kafkaTemplate.send(topic,mapper.writeValueAsString(dto));
+        return ResponseEntity.ok("Add doctor");            
+        
     }
 
     @GetMapping("/{numPass}/getDateDayCountNotes")
