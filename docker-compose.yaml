@@ -12,15 +12,17 @@ services:
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092 
       - DATA_SERVICE_BASE_URL=${DATA_SERVICE_BASE_URL}
-      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - KAFKA_TOPIC_NOTE=${KAFKA_TOPIC_NOTE}
+      - KAFKA_TOPIC_DOCTOR=${KAFKA_TOPIC_DOCTOR}
+      - KAFKA_TOPIC_PATIENT=${KAFKA_TOPIC_PATIENT}
       - SERVER_PORT=8080
     depends_on:
       - kafka
-      - data-app1
+      - data-app
 
-  data-app1:
+  data-app:
     image: serv/data_service
-    container_name: data-app1
+    container_name: data-app
     ports:
       - "8081:8081"
     environment:
@@ -29,7 +31,9 @@ services:
       - DB_PWD=${DB_PWD}
       - DB_HOST=${DB_HOST}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - KAFKA_TOPIC_NOTE=${KAFKA_TOPIC_NOTE}
+      - KAFKA_TOPIC_DOCTOR=${KAFKA_TOPIC_DOCTOR}
+      - KAFKA_TOPIC_PATIENT=${KAFKA_TOPIC_PATIENT}
       - SERVER_PORT=8081
       - KAFKA_CONSUMER_ID=group_id_1
     depends_on:
