@@ -36,6 +36,7 @@ public class PatientService {
         if (patientRepo.existsBySnils(p.getSnils())) {
             return "Patient exits with snils=" + p.getSnils();
         }
+        patientRepo.save(p);
         return "Patient aded";
     }
 

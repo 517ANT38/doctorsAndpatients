@@ -34,6 +34,7 @@ public class DoctorAndNoteService {
     public String saveDoctor(Doctor doctor){
         if(doctorRepo.existsByNumPass(doctor.getNumPass()))
             return "Doctor exits with numPass="+doctor.getNumPass();
+        doctorRepo.save(doctor);
         return "Doctor added";
     }
 
