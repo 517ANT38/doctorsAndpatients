@@ -61,8 +61,6 @@ public class DoctorAndNoteService {
         notesP.add(note);
         pFromDb.setNotes(notesP);
 
-        doctorRepo.save(dFromDb);
-        patientRepo.save(pFromDb);
         noteRepo.save(note);
         return "Save note";
     }
