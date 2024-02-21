@@ -53,7 +53,7 @@ for i in range(20):
     print(requests.post(BASE_URL+"doctors/addDoctor",data=json.dumps(dto),headers=HEADERS).text)
 
 
-for i in range(30):
+for i in range(300):
     snils = randint(0,len(snils_arr)-1)
     numPass = randint(0,len(num_pass_arr)-1)
     dt = datetime.now() + timedelta(days=randint(1,1000),hours=6+i)
