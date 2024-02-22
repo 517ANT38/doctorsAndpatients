@@ -16,5 +16,5 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class DateAndDoctorDto {
     private LocalDate date;
-    private List<DoctorDto> patients;
+    private List<DoctorDto> doctors;
 }

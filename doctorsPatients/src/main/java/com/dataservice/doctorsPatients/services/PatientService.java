@@ -81,7 +81,7 @@ public class PatientService {
         for (var item : map.entrySet()) {
             res.add(new DateAndDoctorDto(item.getKey(), item.getValue()));
         }
-        res.sort((x,y) -> x.getPatients().size() - y.getPatients().size());
+        res.sort((x,y) -> x.getDoctors().size() - y.getDoctors().size());
         return res;
     }
 }
