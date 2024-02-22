@@ -5,10 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,13 +90,17 @@ public class ApiServiceDoctorsController {
 
     @GetMapping("/getFio")
     public ResponseEntity<List<DoctorDto>> getDoctorByFio(FIODto fDto){
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        var httpEnitity = new HttpEntity<>(fDto,headers);
+        
+        StringBuilder builder = new StringBuilder(baseUrl);
+        builder.append("/doctors/getFio?")
+            .append("name=").append(fDto.getName())
+            .append("&family=").append(fDto.getFamily())
+            .append("&patronymic=").append(fDto.getPatronymic());
+
         ParameterizedTypeReference<List<DoctorDto>> v = 
             new ParameterizedTypeReference<List<DoctorDto>>() {};
         try {
-            return template.exchange(baseUrl+"/doctors/getFio", HttpMethod.GET, httpEnitity, v);
+            return template.exchange(builder.toString(), HttpMethod.GET, null, v);
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity

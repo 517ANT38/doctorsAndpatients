@@ -5,10 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -102,13 +99,15 @@ public class ApiServicePatientsController {
 
     @GetMapping("/getFio")
     public ResponseEntity<List<PatientDto>> getByFio(FIODto fDto){
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        var httpEnitity = new HttpEntity<>(fDto,headers);
+        StringBuilder builder = new StringBuilder(baseUrl);
+        builder.append("/doctors/getFio?")
+            .append("name=").append(fDto.getName())
+            .append("&family=").append(fDto.getFamily())
+            .append("&patronymic=").append(fDto.getPatronymic());
         ParameterizedTypeReference<List<PatientDto>> v = 
             new ParameterizedTypeReference<List<PatientDto>>() {};
         try {
-            return restTemplate.exchange(baseUrl+"/patients/getFio", HttpMethod.GET, httpEnitity, v);
+            return restTemplate.exchange(builder.toString(), HttpMethod.GET, null, v);
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity
