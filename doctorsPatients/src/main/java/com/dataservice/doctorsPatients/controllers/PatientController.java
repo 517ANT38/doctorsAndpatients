@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dataservice.doctorsPatients.models.patients.MapperPatient;
 import com.dataservice.doctorsPatients.models.patients.PatientDto;
 import com.dataservice.doctorsPatients.models.util.FIODto;
+import com.dataservice.doctorsPatients.models.util.PatientAndDoctors;
 import com.dataservice.doctorsPatients.services.PatientService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +43,7 @@ public class PatientController {
     }
 
     @GetMapping("/getTop10MaxCountNotes")
-    public ResponseEntity<List<PatientDto>> getTop10MaxCountNotes(){
-        return ResponseEntity.ok(patientService.getTop10MaxCountNotes().stream()
-        .map(mapper::map)
-        .toList());
+    public ResponseEntity<List<PatientAndDoctors>> getTop10MaxCountNotes(){
+        return ResponseEntity.ok(patientService.getTop10MaxCountNotes());
     }
 }

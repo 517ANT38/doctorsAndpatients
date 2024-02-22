@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.apiService.apiHospital.dtos.FIODto;
 import com.apiService.apiHospital.dtos.NoteDtoInput;
+import com.apiService.apiHospital.dtos.PatientAndDoctors;
 import com.apiService.apiHospital.dtos.PatientDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -100,9 +101,9 @@ public class ApiServicePatientsController {
     }
 
     @GetMapping("/getTop10MaxCountNotes")
-    public ResponseEntity<List<PatientDto>> getTop10MaxCountNotes(){
-        ParameterizedTypeReference<List<PatientDto>> v = 
-            new ParameterizedTypeReference<List<PatientDto>>() {};
+    public ResponseEntity<List<PatientAndDoctors>> getTop10MaxCountNotes(){
+        ParameterizedTypeReference<List<PatientAndDoctors>> v = 
+            new ParameterizedTypeReference<List<PatientAndDoctors>>() {};
         return restTemplate.exchange(baseUrl + "/patients/getTop10MaxCountNotes", HttpMethod.GET,null,v);
     }
 

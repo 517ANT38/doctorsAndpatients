@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import com.apiService.apiHospital.dtos.DateCountNoteDto;
+import com.apiService.apiHospital.dtos.DateAndPatientDto;
+import com.apiService.apiHospital.dtos.DoctorAndPatients;
 import com.apiService.apiHospital.dtos.DoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,10 +52,10 @@ public class ApiServiceDoctorsController {
     }
 
     @GetMapping("/{numPass}/getDateDayCountNotes")
-    public ResponseEntity<List<DateCountNoteDto>> getDateDayCountNotes(@PathVariable("numPass")  long numPass){
+    public ResponseEntity<List<DateAndPatientDto>> getDateDayCountNotes(@PathVariable("numPass")  long numPass){
         var path = "/doctors/{numPass}/getDateDayCountNotes";
-        ParameterizedTypeReference<List<DateCountNoteDto>> v =
-             new ParameterizedTypeReference<List<DateCountNoteDto>>() {};
+        ParameterizedTypeReference<List<DateAndPatientDto>> v =
+             new ParameterizedTypeReference<List<DateAndPatientDto>>() {};
         try {
             var res = template.exchange(baseUrl+path, HttpMethod.GET,
                 null, v,Map.of("numPass",numPass));
@@ -108,9 +109,9 @@ public class ApiServiceDoctorsController {
     }
 
     @GetMapping("/getTop10WithMaxPatients")
-    public ResponseEntity<List<DoctorDto>> getTop10WithMaxPatients(){
-        ParameterizedTypeReference<List<DoctorDto>> v = 
-            new ParameterizedTypeReference<List<DoctorDto>>() {};
+    public ResponseEntity<List<DoctorAndPatients>> getTop10WithMaxPatients(){
+        ParameterizedTypeReference<List<DoctorAndPatients>> v = 
+            new ParameterizedTypeReference<List<DoctorAndPatients>>() {};
         var path = "/doctors/getTop10WithMaxPatients";
         return template.exchange(baseUrl+path, HttpMethod.GET,null,v);
     }

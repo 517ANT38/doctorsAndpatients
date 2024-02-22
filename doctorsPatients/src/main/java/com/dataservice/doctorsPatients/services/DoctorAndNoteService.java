@@ -13,8 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dataservice.doctorsPatients.exceptions.DoctorNotFoundException;
 import com.dataservice.doctorsPatients.models.doctors.Doctor;
+import com.dataservice.doctorsPatients.models.doctors.MapperDoctor;
 import com.dataservice.doctorsPatients.models.notes.Note;
-import com.dataservice.doctorsPatients.models.util.DateCountNoteDto;
+import com.dataservice.doctorsPatients.models.patients.MapperPatient;
+import com.dataservice.doctorsPatients.models.patients.PatientDto;
+import com.dataservice.doctorsPatients.models.util.DateAndPatientDto;
+import com.dataservice.doctorsPatients.models.util.DoctorAndPatients;
 import com.dataservice.doctorsPatients.models.util.FIODto;
 import com.dataservice.doctorsPatients.repositories.DoctorRepo;
 import com.dataservice.doctorsPatients.repositories.NoteRepo;
@@ -28,6 +32,8 @@ public class DoctorAndNoteService {
     
     private final DoctorRepo doctorRepo;
     private final PatientRepo patientRepo;
+    private final MapperPatient mapperPatient;
+    private final MapperDoctor mapperDoctor;
     private final NoteRepo noteRepo;
 
     @Transactional
@@ -78,28 +84,33 @@ public class DoctorAndNoteService {
         .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with numPass="+ numPass));
     }
 
-    public List<Doctor> getTop10WithMaxPatients(){
+    public List<DoctorAndPatients> getTop10WithMaxPatients(){
         return doctorRepo.findAll().stream()
             .filter(x -> x.getNotes().size() > 3)
+            .map(x -> new DoctorAndPatients(mapperDoctor.map(x), x.getNotes().stream()
+                .map(Note::getPatient)
+                .map(mapperPatient::map)
+                .toList(), x.getNotes().size()))
             .limit(10)
             .toList();
     }
     
-    public List<DateCountNoteDto> getDateDayCountNotes(long numPass) {
+    public List<DateAndPatientDto> getDateDayCountNotes(long numPass) {
         var d = doctorRepo.findByNumPass(numPass)
             .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with numPass="+ numPass));
         var setNotes = d.getNotes();
-        Map<LocalDate,Integer> map = new HashMap<>();
+        Map<LocalDate,List<PatientDto>> map = new HashMap<>();
         for (Note note : setNotes) {
             var date = note.getDate().toLocalDate();
-            var count = map.getOrDefault(date, 0) + 1;
-            map.put(date, count);
+            var arr = map.getOrDefault(date, new ArrayList<>());
+            arr.add(mapperPatient.map(note.getPatient()));
+            map.put(date, arr);
         }
-        List<DateCountNoteDto> res = new ArrayList<>();
+        List<DateAndPatientDto> res = new ArrayList<>();
         for (var item : map.entrySet()) {
-            res.add(new DateCountNoteDto(item.getKey(), item.getValue()));
+            res.add(new DateAndPatientDto(item.getKey(), item.getValue()));
         }
-        res.sort((x,y) -> x.getCount() - y.getCount());
+        res.sort((x,y) -> x.getPatients().size() - y.getPatients().size());
         return res;
     }
     
