@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dataservice.doctorsPatients.models.patients.MapperPatient;
 import com.dataservice.doctorsPatients.models.patients.PatientDto;
+import com.dataservice.doctorsPatients.models.util.DateAndDoctorDto;
 import com.dataservice.doctorsPatients.models.util.FIODto;
 import com.dataservice.doctorsPatients.models.util.PatientAndDoctors;
 import com.dataservice.doctorsPatients.services.PatientService;
@@ -45,5 +46,10 @@ public class PatientController {
     @GetMapping("/getTop10MaxCountNotes")
     public ResponseEntity<List<PatientAndDoctors>> getTop10MaxCountNotes(){
         return ResponseEntity.ok(patientService.getTop10MaxCountNotes());
+    }
+
+    @GetMapping("/{snils}/getDateDayNotes")
+    public ResponseEntity<List<DateAndDoctorDto>> getDateDayNotes(@PathVariable("snils") String snils){
+        return ResponseEntity.ok(patientService.getDateDayNotes(snils));
     }
 }

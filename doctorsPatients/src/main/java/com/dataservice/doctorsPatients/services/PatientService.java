@@ -1,15 +1,22 @@
 package com.dataservice.doctorsPatients.services;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.dataservice.doctorsPatients.exceptions.DoctorNotFoundException;
 import com.dataservice.doctorsPatients.exceptions.PatientNotFoundException;
+import com.dataservice.doctorsPatients.models.doctors.DoctorDto;
 import com.dataservice.doctorsPatients.models.doctors.MapperDoctor;
 import com.dataservice.doctorsPatients.models.notes.Note;
 import com.dataservice.doctorsPatients.models.patients.MapperPatient;
 import com.dataservice.doctorsPatients.models.patients.Patient;
+import com.dataservice.doctorsPatients.models.util.DateAndDoctorDto;
 import com.dataservice.doctorsPatients.models.util.FIODto;
 import com.dataservice.doctorsPatients.models.util.PatientAndDoctors;
 import com.dataservice.doctorsPatients.repositories.PatientRepo;
@@ -57,5 +64,24 @@ public class PatientService {
                 .patient(mapperPatient.map(x)).build())
             .limit(10)
             .toList();
+    }
+
+    public List<DateAndDoctorDto>  getDateDayNotes(String snils) {
+        var d = patientRepo.findBySnils(snils)
+            .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with snils="+ snils));
+        var setNotes = d.getNotes();
+        Map<LocalDate,List<DoctorDto>> map = new HashMap<>();
+        for (Note note : setNotes) {
+            var date = note.getDate().toLocalDate();
+            var arr = map.getOrDefault(date, new ArrayList<>());
+            arr.add(mapperDoctor.map(note.getDoctor()));
+            map.put(date, arr);
+        }
+        List<DateAndDoctorDto> res = new ArrayList<>();
+        for (var item : map.entrySet()) {
+            res.add(new DateAndDoctorDto(item.getKey(), item.getValue()));
+        }
+        res.sort((x,y) -> x.getPatients().size() - y.getPatients().size());
+        return res;
     }
 }

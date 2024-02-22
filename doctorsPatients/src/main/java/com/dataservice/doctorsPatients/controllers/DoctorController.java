@@ -27,8 +27,8 @@ public class DoctorController {
 
     
 
-    @GetMapping("/{numPass}/getDateDayCountNotes")
-    public ResponseEntity<List<DateAndPatientDto>> getDateDayCountNotes(@PathVariable("numPass") long numPass){
+    @GetMapping("/{numPass}/getDateDayNotes")
+    public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass") long numPass){
         return ResponseEntity.ok(danS.getDateDayCountNotes(numPass));
     }
 

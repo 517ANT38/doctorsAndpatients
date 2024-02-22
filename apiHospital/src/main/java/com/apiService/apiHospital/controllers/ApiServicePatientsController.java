@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import com.apiService.apiHospital.dtos.DateAndDoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
 import com.apiService.apiHospital.dtos.NoteDtoInput;
 import com.apiService.apiHospital.dtos.PatientAndDoctors;
@@ -70,6 +71,22 @@ public class ApiServicePatientsController {
                 null, PatientDto.class, Map.of("snils",snils));
         }
         catch(HttpStatusCodeException e){            
+            return ResponseEntity
+                .status(e.getStatusCode().value())
+                .build();
+        }
+    }
+
+
+    @GetMapping("/{snils}/getDateDayNotes")
+    public ResponseEntity<List<DateAndDoctorDto>> getDateDayNotes(@PathVariable("snils") String snils){
+        var path = "/patients/{snils}/getDateDayNotes";
+        try {
+            ParameterizedTypeReference<List<DateAndDoctorDto>> v = 
+                new ParameterizedTypeReference<List<DateAndDoctorDto>>() {};
+            return restTemplate.exchange(baseUrl + path,HttpMethod.GET,
+                null,v,Map.of("snils",snils));
+        } catch (HttpStatusCodeException e) {
             return ResponseEntity
                 .status(e.getStatusCode().value())
                 .build();

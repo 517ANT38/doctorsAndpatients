@@ -51,9 +51,9 @@ public class ApiServiceDoctorsController {
         
     }
 
-    @GetMapping("/{numPass}/getDateDayCountNotes")
-    public ResponseEntity<List<DateAndPatientDto>> getDateDayCountNotes(@PathVariable("numPass")  long numPass){
-        var path = "/doctors/{numPass}/getDateDayCountNotes";
+    @GetMapping("/{numPass}/getDateDayNotes")
+    public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass")  long numPass){
+        var path = "/doctors/{numPass}/getDateDayNotes";
         ParameterizedTypeReference<List<DateAndPatientDto>> v =
              new ParameterizedTypeReference<List<DateAndPatientDto>>() {};
         try {
