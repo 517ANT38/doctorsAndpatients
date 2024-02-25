@@ -11,7 +11,6 @@ RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM eclipse-temurin:17-jre-alpine
-VOLUME /tmp
 
 ARG WORKSPACE=/workspace/app
 ARG DEPENDENCY=/workspace/app/target/dependency
