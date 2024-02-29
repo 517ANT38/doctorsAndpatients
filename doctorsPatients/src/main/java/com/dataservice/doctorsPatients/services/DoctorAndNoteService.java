@@ -38,8 +38,6 @@ public class DoctorAndNoteService {
 
     @Transactional
     public String saveDoctor(Doctor doctor){
-        if(doctorRepo.existsByNumPass(doctor.getNumPass()))
-            return "Doctor exits with numPass="+doctor.getNumPass();
         doctorRepo.save(doctor);
         return "Doctor added";
     }
@@ -48,12 +46,6 @@ public class DoctorAndNoteService {
     public String saveNote(Note note){
         var d = note.getDoctor();
         var p = note.getPatient();
-        if (d == null || !doctorRepo.existsByNumPass(d.getNumPass())) {
-            return "Doctor is null or not found";
-        }
-        if (p == null || !patientRepo.existsBySnils(p.getSnils())) {
-            return "Patient is null or not found";
-        }
         var dFromDb = doctorRepo.findByNumPass(d.getNumPass()).get();
         var pFromDb = patientRepo.findBySnils(p.getSnils()).get();
         note.setDoctor(dFromDb);

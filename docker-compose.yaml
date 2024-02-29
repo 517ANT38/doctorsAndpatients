@@ -37,8 +37,6 @@ services:
     depends_on:
       - db_app
       - kafka
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     networks:
       - db-network
 
@@ -49,6 +47,8 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PWD}
       POSTGRES_DB: ${DB_NAME} 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - db-network
          

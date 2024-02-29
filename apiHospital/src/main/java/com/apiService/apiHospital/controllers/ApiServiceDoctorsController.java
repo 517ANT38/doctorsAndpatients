@@ -2,38 +2,31 @@ package com.apiService.apiHospital.controllers;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
-
 import com.apiService.apiHospital.dtos.DateAndPatientDto;
 import com.apiService.apiHospital.dtos.DoctorAndPatients;
 import com.apiService.apiHospital.dtos.DoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.apiService.apiHospital.util.ApiHelper;
+import com.apiService.apiHospital.util.MessageRes;
+import com.apiService.apiHospital.util.SenderHelper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 @RestController
 @RequestMapping("/api/doctors")
 @RequiredArgsConstructor
 public class ApiServiceDoctorsController {
 
-    private final ObjectMapper mapper;
-    private final KafkaTemplate<String,String> kafkaTemplate;
-    private final RestTemplate template;
+    private final SenderHelper hSenderHelper;
+    private final ApiHelper helper;
+    
     @Value("${data-service.base-url}")
     private String baseUrl;
     @Value("${kafka.doctor.topic}")
@@ -41,50 +34,34 @@ public class ApiServiceDoctorsController {
 
 
     @PostMapping("/addDoctor")
-    @SneakyThrows
-    public ResponseEntity<String> addDoctor(@RequestBody DoctorDto dto){
-        kafkaTemplate.send(topic,mapper.writeValueAsString(dto));
-        return ResponseEntity.ok("Add doctor");            
+    public ResponseEntity<MessageRes> addDoctor(@RequestBody DoctorDto dto){
+        return hSenderHelper.send(topic, dto);       
         
     }
 
     @GetMapping("/{numPass}/getDateDayNotes")
     public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass")  long numPass){
         var path = "/doctors/{numPass}/getDateDayNotes";
-        ParameterizedTypeReference<List<DateAndPatientDto>> v =
-             new ParameterizedTypeReference<List<DateAndPatientDto>>() {};
-        try {
-            var res = template.exchange(baseUrl+path, HttpMethod.GET,
-                null, v,Map.of("numPass",numPass));
-            return res;
-        }
-        catch(HttpStatusCodeException e){            
-            return ResponseEntity
-                .status(e.getStatusCode().value())
-                .build();
-        }
+        return helper.requestLst(baseUrl+path, 
+            Map.of("numPass",numPass), 
+            DateAndPatientDto.class);
+        
     }
 
     @GetMapping
     public ResponseEntity<List<DoctorDto>> getAll(){
-        ParameterizedTypeReference<List<DoctorDto>> v = 
-            new ParameterizedTypeReference<List<DoctorDto>>() {};
-        return template.exchange(baseUrl+"/doctors", HttpMethod.GET,null,v);
+        
+        return helper.requestLst(baseUrl+"/doctors", null,DoctorDto.class);
 
     }
 
     @GetMapping("/{numPass}")
     public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")long numPass){
         var path ="/doctors/{numPass}";
-        try{
-            return template.exchange(baseUrl+path, HttpMethod.GET, 
-                null, DoctorDto.class, Map.of("numPass",numPass));
-        }
-        catch(HttpStatusCodeException e){            
-            return ResponseEntity
-                .status(e.getStatusCode().value())
-                .build();
-        }
+        return helper.request(baseUrl+path, 
+            Map.of("numPass",numPass), 
+            DoctorDto.class );
+        
         
     }
 
@@ -95,25 +72,16 @@ public class ApiServiceDoctorsController {
         builder.append("/doctors/getFio?")
             .append("name=").append(fDto.getName())
             .append("&family=").append(fDto.getFamily())
-            .append("&patronymic=").append(fDto.getPatronymic());
-
-        ParameterizedTypeReference<List<DoctorDto>> v = 
-            new ParameterizedTypeReference<List<DoctorDto>>() {};
-        try {
-            return template.exchange(builder.toString(), HttpMethod.GET, null, v);
-        }
-        catch(HttpStatusCodeException e){            
-            return ResponseEntity
-                .status(e.getStatusCode().value())
-                .build();
-        }
+            .append("&patronymic=").append(fDto.getPatronymic());       
+        
+        return helper.requestLst(builder.toString(), null, DoctorDto.class);
+        
     }
 
     @GetMapping("/getTop10WithMaxPatients")
     public ResponseEntity<List<DoctorAndPatients>> getTop10WithMaxPatients(){
-        ParameterizedTypeReference<List<DoctorAndPatients>> v = 
-            new ParameterizedTypeReference<List<DoctorAndPatients>>() {};
+        
         var path = "/doctors/getTop10WithMaxPatients";
-        return template.exchange(baseUrl+path, HttpMethod.GET,null,v);
+        return helper.requestLst(baseUrl+path,null,DoctorAndPatients.class);
     }
 }

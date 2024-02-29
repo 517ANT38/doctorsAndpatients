@@ -11,6 +11,8 @@ import com.dataservice.doctorsPatients.models.patients.MapperPatient;
 import com.dataservice.doctorsPatients.models.patients.PatientDto;
 import com.dataservice.doctorsPatients.services.DoctorAndNoteService;
 import com.dataservice.doctorsPatients.services.PatientService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -28,36 +30,36 @@ public class TopicListener {
     private final MapperDoctor mapperDoctor;
     private final ObjectMapper mapper;
 
-    @KafkaListener(topics = "${kafka.note.topic}", groupId = "${kafka.consumer.id}")
+    @KafkaListener(topics = "${kafka.note.topic}",concurrency = "2", groupId = "${kafka.consumer.id}")
     void consumeNote(String dto){
         try {
             var d = mapper.readValue(dto,NoteDtoInput.class);
             String res = doctorAndNoteService.saveNote(mapperNote.map(d));
             log.info(res);
-        }catch(Throwable e){
-            log.error("Mapping error:", e);
+        }catch(JsonProcessingException e){
+            log.error("Mapping error:", e.getMessage());
         }
     }
 
-    @KafkaListener(topics = "${kafka.doctor.topic}", groupId = "${kafka.consumer.id}")
-    void consumeDoctor(String dto){
+    @KafkaListener(topics = "${kafka.doctor.topic}",concurrency = "2", groupId = "${kafka.consumer.id}")
+    void consumeDoctor(String dto) throws JsonMappingException{
         try {
             var d = mapper.readValue(dto,DoctorDto.class);
             String res = doctorAndNoteService.saveDoctor(mapperDoctor.map(d));
             log.info(res);
-        }catch(Throwable e){
-            log.error("Mapping error:", e);
+        }catch(JsonProcessingException e){
+            log.error("Mapping error:", e.getMessage());
         }
     }
 
-    @KafkaListener(topics = "${kafka.patient.topic}", groupId = "${kafka.consumer.id}")
+    @KafkaListener(topics = "${kafka.patient.topic}",concurrency = "2", groupId = "${kafka.consumer.id}")
     void consumePatient(String dto){
         try {
             var d = mapper.readValue(dto,PatientDto.class);
             String res = patientService.savePatient(mapperPatient.map(d));
             log.info(res);
-        }catch(Throwable e){
-            log.error("Mapping error:", e);
+        }catch(JsonProcessingException e){
+            log.error("Mapping error:", e.getMessage());
         }
     }
 }

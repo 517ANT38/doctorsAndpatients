@@ -46,9 +46,6 @@ public class PatientService {
 
     @Transactional
     public String savePatient(Patient p){
-        if (patientRepo.existsBySnils(p.getSnils())) {
-            return "Patient exits with snils=" + p.getSnils();
-        }
         patientRepo.save(p);
         return "Patient aded";
     }
