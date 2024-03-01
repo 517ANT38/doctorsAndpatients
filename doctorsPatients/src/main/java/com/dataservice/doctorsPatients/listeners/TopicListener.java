@@ -30,7 +30,8 @@ public class TopicListener {
     private final MapperDoctor mapperDoctor;
     private final ObjectMapper mapper;
 
-    @KafkaListener(topics = "${kafka.note.topic}",concurrency = "2", groupId = "${kafka.consumer.id}")
+    @KafkaListener(topics = "${kafka.note.topic}",
+        concurrency = "2", groupId = "${kafka.consumer.note.id}")
     void consumeNote(String dto){
         try {
             var d = mapper.readValue(dto,NoteDtoInput.class);
@@ -41,7 +42,8 @@ public class TopicListener {
         }
     }
 
-    @KafkaListener(topics = "${kafka.doctor.topic}",concurrency = "2", groupId = "${kafka.consumer.id}")
+    @KafkaListener(topics = "${kafka.doctor.topic}",
+        concurrency = "2", groupId = "${kafka.consumer.doctor.id}")
     void consumeDoctor(String dto) throws JsonMappingException{
         try {
             var d = mapper.readValue(dto,DoctorDto.class);
@@ -52,7 +54,8 @@ public class TopicListener {
         }
     }
 
-    @KafkaListener(topics = "${kafka.patient.topic}",concurrency = "2", groupId = "${kafka.consumer.id}")
+    @KafkaListener(topics = "${kafka.patient.topic}",
+        concurrency = "2", groupId = "${kafka.consumer.patient.id}")
     void consumePatient(String dto){
         try {
             var d = mapper.readValue(dto,PatientDto.class);

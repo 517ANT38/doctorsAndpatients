@@ -13,4 +13,6 @@ kafka:
   note.topic: ${KAFKA_TOPIC_NOTE}
   doctor.topic: ${KAFKA_TOPIC_DOCTOR}
   patient.topic: ${KAFKA_TOPIC_PATIENT}
-  consumer.id: ${KAFKA_CONSUMER_ID}
+  consumer.note.id: ${KAFKA_CONSUMER_NOTE_ID}
+  consumer.doctor.id: ${KAFKA_CONSUMER_DOCTOR_ID}
+  consumer.patient.id: ${KAFKA_CONSUMER_PATIENT_ID}

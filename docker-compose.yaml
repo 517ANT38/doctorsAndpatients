@@ -9,13 +9,8 @@ services:
       - api-network
     ports:
       - "8080:8080"
-    environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092 
-      - DATA_SERVICE_BASE_URL=${DATA_SERVICE_BASE_URL}
-      - KAFKA_TOPIC_NOTE=${KAFKA_TOPIC_NOTE}
-      - KAFKA_TOPIC_DOCTOR=${KAFKA_TOPIC_DOCTOR}
-      - KAFKA_TOPIC_PATIENT=${KAFKA_TOPIC_PATIENT}
-      - SERVER_PORT=8080
+    env_file:
+      - ./envs/api-service.env
     depends_on:
       - kafka
       - data-app
@@ -23,17 +18,8 @@ services:
   data-app:
     image: serv/data_service
     container_name: data-app
-    environment:
-      - DB_USER=${DB_USER}
-      - DB_NAME=${DB_NAME}
-      - DB_PWD=${DB_PWD}
-      - DB_HOST=${DB_HOST}
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - KAFKA_TOPIC_NOTE=${KAFKA_TOPIC_NOTE}
-      - KAFKA_TOPIC_DOCTOR=${KAFKA_TOPIC_DOCTOR}
-      - KAFKA_TOPIC_PATIENT=${KAFKA_TOPIC_PATIENT}
-      - SERVER_PORT=8081
-      - KAFKA_CONSUMER_ID=group_id_1
+    env_file:
+      - ./envs/data-service.env
     depends_on:
       - db_app
       - kafka
@@ -43,10 +29,8 @@ services:
   db_app:
     image: postgres 
     container_name: ${DB_HOST}
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PWD}
-      POSTGRES_DB: ${DB_NAME} 
+    env_file:
+      - ./envs/postgres.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -57,12 +41,8 @@ services:
     image: confluentinc/cp-kafka:latest
     networks:
       - db-network
-    environment:      
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    env_file:
+      - ./envs/kafka.env
     depends_on:
       - zookeeper
 
