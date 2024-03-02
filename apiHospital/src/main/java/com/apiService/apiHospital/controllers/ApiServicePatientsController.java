@@ -49,7 +49,7 @@ public class ApiServicePatientsController {
     @PostMapping("/addPatient")
     public ResponseEntity<MessageRes> addPatient(@RequestBody PatientDto dto){
         
-        return senderHelper.send(noteTopic,dto.getSnils(),dto);
+        return senderHelper.send(patientTopic,dto.getSnils(),dto);
     }
 
     @GetMapping("/{snils}")
