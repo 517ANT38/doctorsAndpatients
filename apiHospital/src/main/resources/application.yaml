@@ -11,5 +11,6 @@ spring:
       auto-offset-reset: earliest
     producer:
       properties.spring.json.add.type.headers: false
+      acks: 1
 data-service:
   base-url: ${DATA_SERVICE_BASE_URL}
