@@ -48,7 +48,7 @@ public class ApiServicePatientsController {
 
     @PostMapping("/addPatient")
     public ResponseEntity<MessageRes> addPatient(@RequestBody PatientDto dto){
-        System.out.println("!!!");
+        
         return senderHelper.send(noteTopic,dto.getSnils(),dto);
     }
 
