@@ -17,7 +17,10 @@ public class ApiHelper {
 
     public <T> ResponseEntity<T> request(String url,Map<String,Object> params,Class<T> type){
         try {
-            return template.exchange(url, HttpMethod.GET,null,type,params);
+            if (params != null) {
+                return template.exchange(url, HttpMethod.GET,null,type,params);
+            }
+            return template.exchange(url, HttpMethod.GET,null,type);
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity
@@ -29,7 +32,10 @@ public class ApiHelper {
     public <T> ResponseEntity<List<T>> requestLst(String url,Map<String,Object> params,Class<T> type){
         ParameterizedTypeReference<List<T>> kst = new ParameterizedTypeReference<List<T>>() {};
         try {
-            return template.exchange(url, HttpMethod.GET,null,kst,params);
+            if (params != null) {
+                return template.exchange(url, HttpMethod.GET,null,kst,params);
+            }
+            return template.exchange(url, HttpMethod.GET,null,kst);
         }
         catch(HttpStatusCodeException e){            
             return ResponseEntity

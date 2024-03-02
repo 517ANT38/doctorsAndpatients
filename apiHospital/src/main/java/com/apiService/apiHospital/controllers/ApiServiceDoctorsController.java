@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApiServiceDoctorsController {
 
-    private final SenderHelper hSenderHelper;
+    private final SenderHelper senderHelper;
     private final ApiHelper helper;
     
     @Value("${data-service.base-url}")
@@ -35,7 +35,7 @@ public class ApiServiceDoctorsController {
 
     @PostMapping("/addDoctor")
     public ResponseEntity<MessageRes> addDoctor(@RequestBody DoctorDto dto){
-        return hSenderHelper.send(topic, dto);       
+        return senderHelper.send(topic, dto);       
         
     }
 

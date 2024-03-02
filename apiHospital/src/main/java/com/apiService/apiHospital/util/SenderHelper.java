@@ -35,6 +35,7 @@ public class SenderHelper {
             log.error("Json error", e.getMessage());
             return ResponseEntity.unprocessableEntity().build();
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             log.error("Interrupted error", e.getMessage());
             return ResponseEntity.internalServerError().build();
         } catch (ExecutionException e) {

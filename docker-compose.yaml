@@ -28,7 +28,7 @@ services:
 
   db_app:
     image: postgres 
-    container_name: ${DB_HOST}
+    container_name: db_app
     env_file:
       - ./envs/postgres.env
     volumes:
