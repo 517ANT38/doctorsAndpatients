@@ -21,10 +21,10 @@ public class SenderHelper {
     private final KafkaTemplate<String,String> kafkaTemplate;
     private final ObjectMapper mapper;
 
-    public ResponseEntity<MessageRes> send(String topic,Object obj){
+    public ResponseEntity<MessageRes> send(String topic,String key,Object obj){
         try {
             var s = mapper.writeValueAsString(obj);
-            kafkaTemplate.send(topic, topic, s).get();
+            kafkaTemplate.send(topic, key, s).get();
             return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(MessageRes.builder()

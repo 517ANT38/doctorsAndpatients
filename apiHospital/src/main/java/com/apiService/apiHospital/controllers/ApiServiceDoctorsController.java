@@ -35,7 +35,7 @@ public class ApiServiceDoctorsController {
 
     @PostMapping("/addDoctor")
     public ResponseEntity<MessageRes> addDoctor(@RequestBody DoctorDto dto){
-        return senderHelper.send(topic, dto);       
+        return senderHelper.send(topic,String.valueOf(dto.getNumPass()) ,dto);       
         
     }
 

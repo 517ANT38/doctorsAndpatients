@@ -43,13 +43,13 @@ public class ApiServicePatientsController {
     @PostMapping("/addNoteInDoctor")
     public ResponseEntity<MessageRes> addNote(@RequestBody NoteDtoInput dto){
         
-        return senderHelper.send(noteTopic,dto);
+        return senderHelper.send(noteTopic,dto.getSnils(),dto);
     }
 
     @PostMapping("/addPatient")
     public ResponseEntity<MessageRes> addPatient(@RequestBody PatientDto dto){
         System.out.println("!!!");
-        return senderHelper.send(noteTopic,dto);
+        return senderHelper.send(noteTopic,dto.getSnils(),dto);
     }
 
     @GetMapping("/{snils}")
