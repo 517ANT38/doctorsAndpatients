@@ -17,6 +17,10 @@ import com.apiService.apiHospital.dtos.FIODto;
 import com.apiService.apiHospital.util.ApiHelper;
 import com.apiService.apiHospital.util.MessageRes;
 import com.apiService.apiHospital.util.SenderHelper;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -34,12 +38,21 @@ public class ApiServiceDoctorsController {
 
 
     @PostMapping("/addDoctor")
+    @ApiResponses({
+        @ApiResponse(responseCode="201"),
+        @ApiResponse(responseCode="500"),
+        @ApiResponse(responseCode="422")
+    })
     public ResponseEntity<MessageRes> addDoctor(@RequestBody DoctorDto dto){
         return senderHelper.send(topic,String.valueOf(dto.getNumPass()) ,dto);       
         
     }
 
     @GetMapping("/{numPass}/getDateDayNotes")
+    @ApiResponses({
+        @ApiResponse(responseCode="404",content = @Content(schema = @Schema())),
+        @ApiResponse(responseCode="200")
+    })
     public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass")  long numPass){
         var path = "/doctors/{numPass}/getDateDayNotes";
         return helper.requestLst(baseUrl+path, 
@@ -56,6 +69,10 @@ public class ApiServiceDoctorsController {
     }
 
     @GetMapping("/{numPass}")
+    @ApiResponses({
+        @ApiResponse(responseCode="404",content = @Content(schema = @Schema())),
+        @ApiResponse(responseCode="200")
+    })
     public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")long numPass){
         var path ="/doctors/{numPass}";
         return helper.request(baseUrl+path, 

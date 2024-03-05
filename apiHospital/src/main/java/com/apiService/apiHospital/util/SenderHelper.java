@@ -1,6 +1,5 @@
 package com.apiService.apiHospital.util;
 
-import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.HttpStatus;
@@ -27,20 +26,27 @@ public class SenderHelper {
             kafkaTemplate.send(topic, key, s).get();
             return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(MessageRes.builder()
-                    .msg("Added data successfully")
-                    .timeStamp(LocalDateTime.now().toString())
-                    .build());
+                .body(new MessageRes("Added data successfully"));
         } catch (JsonProcessingException e) {
+
             log.error("Json error", e.getMessage());
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new MessageRes("Unprocessable Content"));
+
         } catch (InterruptedException e) {
+
             Thread.currentThread().interrupt();
             log.error("Interrupted error", e.getMessage());
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageRes("Internal server error"));
+
         } catch (ExecutionException e) {
             log.error("Execution error", e.getMessage());
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new MessageRes("Internal server error"));
         }
     }
 }

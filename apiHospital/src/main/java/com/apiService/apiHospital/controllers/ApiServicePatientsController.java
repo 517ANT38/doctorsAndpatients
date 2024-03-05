@@ -21,6 +21,11 @@ import com.apiService.apiHospital.dtos.PatientDto;
 import com.apiService.apiHospital.util.ApiHelper;
 import com.apiService.apiHospital.util.MessageRes;
 import com.apiService.apiHospital.util.SenderHelper;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,18 +46,32 @@ public class ApiServicePatientsController {
     private String patientTopic;
 
     @PostMapping("/addNoteInDoctor")
+    @ApiResponses({
+        @ApiResponse(responseCode="201"),
+        @ApiResponse(responseCode="500"),
+        @ApiResponse(responseCode="422")
+    })
     public ResponseEntity<MessageRes> addNote(@RequestBody NoteDtoInput dto){
         
         return senderHelper.send(noteTopic,dto.getSnils(),dto);
     }
 
     @PostMapping("/addPatient")
+    @ApiResponses({
+        @ApiResponse(responseCode="201"),
+        @ApiResponse(responseCode="500"),
+        @ApiResponse(responseCode="422")
+    })
     public ResponseEntity<MessageRes> addPatient(@RequestBody PatientDto dto){
         
         return senderHelper.send(patientTopic,dto.getSnils(),dto);
     }
 
     @GetMapping("/{snils}")
+    @ApiResponses({
+        @ApiResponse(responseCode="404",content = @Content(schema = @Schema())),
+        @ApiResponse(responseCode="200")
+    })
     public ResponseEntity<PatientDto> getById(@PathVariable String snils){
         var path ="/patients/{snils}";       
         return helper.request(baseUrl+path, Map.of("snils",snils),PatientDto.class);
@@ -61,6 +80,10 @@ public class ApiServicePatientsController {
 
 
     @GetMapping("/{snils}/getDateDayNotes")
+    @ApiResponses({
+        @ApiResponse(responseCode="404",content = @Content(schema = @Schema())),
+        @ApiResponse(responseCode="200")
+    })
     public ResponseEntity<List<DateAndDoctorDto>> getDateDayNotes(@PathVariable("snils") String snils){
         var path = "/patients/{snils}/getDateDayNotes";        
         return helper.requestLst(baseUrl + path,
