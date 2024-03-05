@@ -101,7 +101,7 @@ public class ApiServicePatientsController {
     @GetMapping("/getFio")
     public ResponseEntity<List<PatientDto>> getByFio(FIODto fDto){
         StringBuilder builder = new StringBuilder(baseUrl);
-        builder.append("/doctors/getFio?")
+        builder.append("/patients/getFio?")
             .append("name=").append(fDto.getName())
             .append("&family=").append(fDto.getFamily())
             .append("&patronymic=").append(fDto.getPatronymic());
