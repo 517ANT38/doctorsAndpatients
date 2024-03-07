@@ -34,19 +34,13 @@ public class SenderHelper {
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(new MessageRes("Unprocessable Content"));
 
-        } catch (InterruptedException e) {
+        } catch (InterruptedException|ExecutionException e) {
 
-            Thread.currentThread().interrupt();
-            log.error("Interrupted error", e.getMessage());
+            log.error("Server error", e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageRes("Internal server error"));
 
-        } catch (ExecutionException e) {
-            log.error("Execution error", e.getMessage());
-            return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new MessageRes("Internal server error"));
-        }
+        } 
     }
 }
