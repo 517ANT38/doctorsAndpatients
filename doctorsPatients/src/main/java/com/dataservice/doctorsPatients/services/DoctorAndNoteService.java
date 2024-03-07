@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.comparator.Comparators;
 
 import com.dataservice.doctorsPatients.exceptions.DoctorNotFoundException;
 import com.dataservice.doctorsPatients.models.doctors.Doctor;
@@ -83,6 +84,7 @@ public class DoctorAndNoteService {
                 .map(Note::getPatient)
                 .map(mapperPatient::map)
                 .toList(), x.getNotes().size()))
+            .sorted((x,y) -> Long.compare(x.getCountPatients(), y.getCountPatients()))
             .limit(10)
             .toList();
     }
@@ -102,7 +104,7 @@ public class DoctorAndNoteService {
         for (var item : map.entrySet()) {
             res.add(new DateAndPatientDto(item.getKey(), item.getValue()));
         }
-        res.sort((x,y) -> x.getPatients().size() - y.getPatients().size());
+        res.sort((x,y) -> x.getDate().compareTo(y.getDate()));
         return res;
     }
     
