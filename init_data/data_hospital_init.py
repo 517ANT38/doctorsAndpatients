@@ -47,7 +47,7 @@ for i in range(20):
     dto = {
         "fio":fio,
         "jobTitle": JOBS_DOCTORS[index],
-        "numPass": tmp_pass,
+        "numPass": f"{tmp_pass}",
         "dateEmp": dt.strftime("%Y-%m-%d")
     }
     print(requests.post(BASE_URL+"doctors/addDoctor",data=json.dumps(dto),headers=HEADERS).text)

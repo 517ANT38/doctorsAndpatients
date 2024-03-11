@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class DoctorDto {
     private FIODto fio;
-    private long  numPass;
+    private String  numPass;
     private String jobTitle;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateEmp;

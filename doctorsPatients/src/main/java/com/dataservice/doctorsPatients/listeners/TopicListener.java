@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.dataservice.doctorsPatients.models.doctors.DoctorDto;
 import com.dataservice.doctorsPatients.models.doctors.MapperDoctor;
 import com.dataservice.doctorsPatients.models.notes.MapperNote;
-import com.dataservice.doctorsPatients.models.notes.NoteDtoInput;
+import com.dataservice.doctorsPatients.models.notes.NoteDto;
 import com.dataservice.doctorsPatients.models.patients.MapperPatient;
 import com.dataservice.doctorsPatients.models.patients.PatientDto;
 import com.dataservice.doctorsPatients.services.DoctorAndNoteService;
@@ -34,7 +34,7 @@ public class TopicListener {
         concurrency = "2", groupId = "${kafka.consumer.note.id}")
     void consumeNote(String dto){
         try {
-            var d = mapper.readValue(dto,NoteDtoInput.class);
+            var d = mapper.readValue(dto,NoteDto.class);
             String res = doctorAndNoteService.saveNote(mapperNote.map(d));
             log.info(res);
         }catch(JsonProcessingException e){

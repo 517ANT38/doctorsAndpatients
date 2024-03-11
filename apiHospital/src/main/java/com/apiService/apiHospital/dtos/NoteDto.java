@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
-public class NoteDtoInput {
-    private long numPass;
+public class NoteDto {
+    private String numPass;
     private String snils;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;

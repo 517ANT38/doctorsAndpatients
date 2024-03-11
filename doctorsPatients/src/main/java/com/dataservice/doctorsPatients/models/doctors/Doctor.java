@@ -41,7 +41,7 @@ public class Doctor {
     })
     private FIODto fio;
     @Column(unique = true)
-    private long numPass;
+    private String numPass;
     private String jobTitle;
     private LocalDate dateEmp;
     @OneToMany(mappedBy = "doctor")
@@ -52,7 +52,7 @@ public class Doctor {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((fio == null) ? 0 : fio.hashCode());
-        result = prime * result + (int) (numPass ^ (numPass >>> 32));
+        result = prime * result + ((numPass == null) ? 0 : numPass.hashCode());
         result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
         result = prime * result + ((dateEmp == null) ? 0 : dateEmp.hashCode());
         return result;
@@ -76,7 +76,10 @@ public class Doctor {
                 return false;
         } else if (!fio.equals(other.fio))
             return false;
-        if (numPass != other.numPass)
+        if (numPass == null) {
+            if (other.numPass != null)
+                return false;
+        } else if (!numPass.equals(other.numPass))
             return false;
         if (jobTitle == null) {
             if (other.jobTitle != null)
@@ -90,6 +93,7 @@ public class Doctor {
             return false;
         return true;
     }
+    
 
     
 }

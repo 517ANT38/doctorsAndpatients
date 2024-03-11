@@ -44,7 +44,7 @@ public class ApiServiceDoctorsController {
         @ApiResponse(responseCode="422")
     })
     public ResponseEntity<MessageRes> addDoctor(@RequestBody DoctorDto dto){
-        return senderHelper.send(topic,String.valueOf(dto.getNumPass()) ,dto);       
+        return senderHelper.send(topic,dto.getNumPass() ,dto);       
         
     }
 
@@ -53,7 +53,7 @@ public class ApiServiceDoctorsController {
         @ApiResponse(responseCode="404",content = @Content(schema = @Schema())),
         @ApiResponse(responseCode="200")
     })
-    public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass")  long numPass){
+    public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass")  String numPass){
         var path = "/doctors/{numPass}/getDateDayNotes";
         return helper.requestLst(baseUrl+path, 
             Map.of("numPass",numPass), 
@@ -73,7 +73,7 @@ public class ApiServiceDoctorsController {
         @ApiResponse(responseCode="404",content = @Content(schema = @Schema())),
         @ApiResponse(responseCode="200")
     })
-    public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")long numPass){
+    public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")String numPass){
         var path ="/doctors/{numPass}";
         return helper.request(baseUrl+path, 
             Map.of("numPass",numPass), 

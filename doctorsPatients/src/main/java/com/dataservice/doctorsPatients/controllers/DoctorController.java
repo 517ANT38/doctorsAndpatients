@@ -28,7 +28,7 @@ public class DoctorController {
     
 
     @GetMapping("/{numPass}/getDateDayNotes")
-    public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass") long numPass){
+    public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass") String numPass){
         return ResponseEntity.ok(danS.getDateDayCountNotes(numPass));
     }
 
@@ -40,7 +40,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{numPass}")
-    public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")long numPass){
+    public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")String numPass){
         return ResponseEntity.ok(mapper.map(danS.getByNumPass(numPass)));
     }
 

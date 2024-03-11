@@ -12,6 +12,6 @@ import com.dataservice.doctorsPatients.models.util.FIODto;
 @Repository
 public interface DoctorRepo extends JpaRepository<Doctor,Integer> {
     List<Doctor> findByFio(FIODto fio);
-    boolean existsByNumPass(long np);
-    Optional<Doctor> findByNumPass(long np);
+    boolean existsByNumPass(String np);
+    Optional<Doctor> findByNumPass(String np);
 }

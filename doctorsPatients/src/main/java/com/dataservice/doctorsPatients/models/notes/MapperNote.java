@@ -7,7 +7,7 @@ import com.dataservice.doctorsPatients.models.patients.Patient;
 
 @Component
 public class MapperNote {
-    public Note map(NoteDtoInput dto){
+    public Note map(NoteDto dto){
         var note = new Note();
         note.setDate(dto.getDate());
         note.setDoctor(Doctor.builder()
@@ -16,8 +16,8 @@ public class MapperNote {
             .snils(dto.getSnils()).build());
         return note;
     }
-    public NoteDtoOutput map(Note m){       
-        return NoteDtoOutput.builder()
+    public NoteDto map(Note m){       
+        return NoteDto.builder()
             .snils(m.getPatient().getSnils())
             .numPass(m.getDoctor().getNumPass())
             .date(m.getDate()).build();

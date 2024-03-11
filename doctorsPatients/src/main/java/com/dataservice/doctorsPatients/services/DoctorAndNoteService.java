@@ -71,7 +71,7 @@ public class DoctorAndNoteService {
         return doctorRepo.findAll();
     }
 
-    public Doctor getByNumPass(long numPass){
+    public Doctor getByNumPass(String numPass){
         return doctorRepo.findByNumPass(numPass)
         .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with numPass="+ numPass));
     }
@@ -88,7 +88,7 @@ public class DoctorAndNoteService {
             .toList();
     }
     
-    public List<DateAndPatientDto> getDateDayCountNotes(long numPass) {
+    public List<DateAndPatientDto> getDateDayCountNotes(String numPass) {
         var d = doctorRepo.findByNumPass(numPass)
             .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with numPass="+ numPass));
         var setNotes = d.getNotes();

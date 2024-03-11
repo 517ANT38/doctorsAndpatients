@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.apiService.apiHospital.dtos.DateAndDoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
-import com.apiService.apiHospital.dtos.NoteDtoInput;
+import com.apiService.apiHospital.dtos.NoteDto;
 import com.apiService.apiHospital.dtos.PatientAndDoctors;
 import com.apiService.apiHospital.dtos.PatientDto;
 import com.apiService.apiHospital.util.ApiHelper;
@@ -51,7 +51,7 @@ public class ApiServicePatientsController {
         @ApiResponse(responseCode="500"),
         @ApiResponse(responseCode="422")
     })
-    public ResponseEntity<MessageRes> addNote(@RequestBody NoteDtoInput dto){
+    public ResponseEntity<MessageRes> addNote(@RequestBody NoteDto dto){
         
         return senderHelper.send(noteTopic,dto.getSnils(),dto);
     }
