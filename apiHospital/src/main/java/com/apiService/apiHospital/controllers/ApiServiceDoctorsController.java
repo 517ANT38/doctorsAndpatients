@@ -14,9 +14,9 @@ import com.apiService.apiHospital.dtos.DateAndPatientDto;
 import com.apiService.apiHospital.dtos.DoctorAndPatients;
 import com.apiService.apiHospital.dtos.DoctorDto;
 import com.apiService.apiHospital.dtos.FIODto;
-import com.apiService.apiHospital.util.ApiHelper;
+import com.apiService.apiHospital.util.GetterRequest;
 import com.apiService.apiHospital.util.MessageRes;
-import com.apiService.apiHospital.util.SenderHelper;
+import com.apiService.apiHospital.util.Publisher;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,8 +28,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApiServiceDoctorsController {
 
-    private final SenderHelper senderHelper;
-    private final ApiHelper helper;
+    private final Publisher senderHelper;
+    private final GetterRequest helper;
     
     @Value("${data-service.base-url}")
     private String baseUrl;

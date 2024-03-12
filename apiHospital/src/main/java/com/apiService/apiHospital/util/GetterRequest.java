@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ApiHelper {
+public class GetterRequest {
     private final RestTemplate template;
 
     public <T> ResponseEntity<T> request(String url,Map<String,Object> params,Class<T> type){
