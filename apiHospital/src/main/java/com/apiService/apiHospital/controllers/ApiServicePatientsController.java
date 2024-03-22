@@ -35,8 +35,8 @@ import lombok.RequiredArgsConstructor;
     methods = {RequestMethod.GET,RequestMethod.POST})
 public class ApiServicePatientsController {
     
-    private final GetterRequest helper;
-    private final Publisher senderHelper;
+    private final GetterRequest getterRequest;
+    private final Publisher publisher;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -53,7 +53,7 @@ public class ApiServicePatientsController {
     })
     public ResponseEntity<MessageRes> addNote(@RequestBody NoteDto dto){
         
-        return senderHelper.send(noteTopic,dto.getSnils(),dto);
+        return publisher.send(noteTopic,dto.getSnils(),dto);
     }
 
     @PostMapping("/addPatient")
@@ -64,7 +64,7 @@ public class ApiServicePatientsController {
     })
     public ResponseEntity<MessageRes> addPatient(@RequestBody PatientDto dto){
         
-        return senderHelper.send(patientTopic,dto.getSnils(),dto);
+        return publisher.send(patientTopic,dto.getSnils(),dto);
     }
 
     @GetMapping("/{snils}")
@@ -74,7 +74,7 @@ public class ApiServicePatientsController {
     })
     public ResponseEntity<PatientDto> getById(@PathVariable String snils){
         var path ="/patients/{snils}";       
-        return helper.request(baseUrl+path, Map.of("snils",snils),PatientDto.class);
+        return getterRequest.request(baseUrl+path, Map.of("snils",snils),PatientDto.class);
         
     }
 
@@ -86,7 +86,7 @@ public class ApiServicePatientsController {
     })
     public ResponseEntity<List<DateAndDoctorDto>> getDateDayNotes(@PathVariable("snils") String snils){
         var path = "/patients/{snils}/getDateDayNotes";        
-        return helper.requestLst(baseUrl + path,
+        return getterRequest.requestLst(baseUrl + path,
             Map.of("snils",snils),
             DateAndDoctorDto.class);
         
@@ -95,7 +95,7 @@ public class ApiServicePatientsController {
     @GetMapping
     public ResponseEntity<List<PatientDto>> getAll(){
         
-        return helper.requestLst(baseUrl + "/patients", null,PatientDto.class);
+        return getterRequest.requestLst(baseUrl + "/patients", null,PatientDto.class);
     }
 
     @GetMapping("/getFio")
@@ -105,14 +105,14 @@ public class ApiServicePatientsController {
             .append("name=").append(fDto.getName())
             .append("&family=").append(fDto.getFamily())
             .append("&patronymic=").append(fDto.getPatronymic());
-        return helper.requestLst(builder.toString(), null,PatientDto.class);
+        return getterRequest.requestLst(builder.toString(), null,PatientDto.class);
        
     }
 
     @GetMapping("/getTop10MaxCountNotes")
     public ResponseEntity<List<PatientAndDoctors>> getTop10MaxCountNotes(){
         var path = "/patients/getTop10MaxCountNotes";
-        return helper.requestLst(baseUrl + path ,null,PatientAndDoctors.class);
+        return getterRequest.requestLst(baseUrl + path ,null,PatientAndDoctors.class);
     }
 
 }

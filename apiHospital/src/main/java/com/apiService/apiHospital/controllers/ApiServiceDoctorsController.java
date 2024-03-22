@@ -28,8 +28,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApiServiceDoctorsController {
 
-    private final Publisher senderHelper;
-    private final GetterRequest helper;
+    private final Publisher publisher;
+    private final GetterRequest getterRequest;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -44,7 +44,7 @@ public class ApiServiceDoctorsController {
         @ApiResponse(responseCode="422")
     })
     public ResponseEntity<MessageRes> addDoctor(@RequestBody DoctorDto dto){
-        return senderHelper.send(topic,dto.getNumPass() ,dto);       
+        return publisher.send(topic,dto.getNumPass() ,dto);       
         
     }
 
@@ -55,7 +55,7 @@ public class ApiServiceDoctorsController {
     })
     public ResponseEntity<List<DateAndPatientDto>> getDateDayNotes(@PathVariable("numPass")  String numPass){
         var path = "/doctors/{numPass}/getDateDayNotes";
-        return helper.requestLst(baseUrl+path, 
+        return getterRequest.requestLst(baseUrl+path, 
             Map.of("numPass",numPass), 
             DateAndPatientDto.class);
         
@@ -64,7 +64,7 @@ public class ApiServiceDoctorsController {
     @GetMapping
     public ResponseEntity<List<DoctorDto>> getAll(){
         
-        return helper.requestLst(baseUrl+"/doctors", null,DoctorDto.class);
+        return getterRequest.requestLst(baseUrl+"/doctors", null,DoctorDto.class);
 
     }
 
@@ -75,7 +75,7 @@ public class ApiServiceDoctorsController {
     })
     public ResponseEntity<DoctorDto> getById(@PathVariable("numPass")String numPass){
         var path ="/doctors/{numPass}";
-        return helper.request(baseUrl+path, 
+        return getterRequest.request(baseUrl+path, 
             Map.of("numPass",numPass), 
             DoctorDto.class );
         
@@ -91,7 +91,7 @@ public class ApiServiceDoctorsController {
             .append("&family=").append(fDto.getFamily())
             .append("&patronymic=").append(fDto.getPatronymic());       
         
-        return helper.requestLst(builder.toString(), null, DoctorDto.class);
+        return getterRequest.requestLst(builder.toString(), null, DoctorDto.class);
         
     }
 
@@ -99,6 +99,6 @@ public class ApiServiceDoctorsController {
     public ResponseEntity<List<DoctorAndPatients>> getTop10WithMaxPatients(){
         
         var path = "/doctors/getTop10WithMaxPatients";
-        return helper.requestLst(baseUrl+path,null,DoctorAndPatients.class);
+        return getterRequest.requestLst(baseUrl+path,null,DoctorAndPatients.class);
     }
 }
